@@ -13,8 +13,8 @@ Team 14
 
 This project is an enterprise-level fullstack application that processes MoMo SMS data in XML format, cleans and categorizes the data, stores it in a relational database, and builds a frontend interface to analyze and visualize the data.
 
-**Architecture Diagram Link:**
+**Architecture Diagram:**
 
-*Scrum board link*
+Scrum board link
 
 https://github.com/users/k-bridget/projects/3/views/1
