@@ -18,3 +18,8 @@ This project is an enterprise-level fullstack application that processes MoMo SM
 **Scrum board link**
 
 https://github.com/users/k-bridget/projects/3/views/1
+
+**system architecture design link**
+
+https://drive.google.com/file/d/1jDt06enq7uJaDVqQyISlZ2s3PW5_cfyS/view?usp=sharing
+
