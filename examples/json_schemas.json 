@@ -1,0 +1,84 @@
+{
+  "Users": [
+    {
+      "user_id": 1,
+      "name": "Mahirwe Moses",
+      "phone_number": "+250788123456",
+      "email": "M.moses@example.com",
+      "created_at": "2025-09-10T14:30:00Z"
+    },
+    {
+      "user_id": 2,
+      "name": "Alice Uwera",
+      "phone_number": "+250783987654",
+      "email": "alice.uwase@example.com",
+      "created_at": "2025-09-11T09:45:00Z"
+    }
+  ],
+
+  "Transaction_Categories": [
+    {
+      "category_id": 1,
+      "category_name": "Airtime Purchase",
+      "description": "Buying airtime"
+    },
+    {
+      "category_id": 2,
+      "category_name": "Money Transfer",
+      "description": "Sending money to another user"
+    }
+  ],
+
+  "Transactions": [
+    {
+      "transaction_id": 101,
+      "amount": 5000.00,
+      "currency": "RWF",
+      "status": "SUCCESS",
+      "transaction_date": "2025-09-12T16:10:00Z",
+      "sender_id": 1,
+      "receiver_id": 2,
+      "category_id": 2
+    }
+  ],
+
+  "System_Logs": [
+    {
+      "log_id": 1,
+      "transaction_id": 101,
+      "log_message": "Transaction parsed and stored successfully",
+      "log_level": "INFO",
+      "timestamp": "2025-09-12T16:11:00Z"
+    }
+  ],
+
+  "Complex_Transaction_Object": {
+    "transaction_id": 101,
+    "amount": 5000.00,
+    "currency": "RWF",
+    "status": "SUCCESS",
+    "transaction_date": "2025-09-12T16:10:00Z",
+    "category": {
+      "category_id": 2,
+      "category_name": "Money Transfer"
+    },
+    "sender": {
+      "user_id": 1,
+      "name": "Mahirwe Moses",
+      "phone_number": "+250788123456"
+    },
+    "receiver": {
+      "user_id": 2,
+      "name": "Alice Uwera",
+      "phone_number": "+250783987654"
+    },
+    "system_logs": [
+      {
+        "log_id": 1,
+        "log_message": "Transaction parsed and stored successfully",
+        "log_level": "INFO",
+        "timestamp": "2025-09-12T16:11:00Z"
+      }
+    ]
+  }
+}
