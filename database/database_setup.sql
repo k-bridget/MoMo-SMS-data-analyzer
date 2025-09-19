@@ -1,4 +1,6 @@
--- Database Setup Script for MySQL based on provided ERD
+-- Create the MoMo Database
+CREATE DATABASE momo_transactions_db;
+USE momo_transactions_db;
 -- This script creates tables, constraints, indexes, inserts sample data, and includes basic CRUD operations for testing.
 
 -- Drop tables if they exist to start fresh
