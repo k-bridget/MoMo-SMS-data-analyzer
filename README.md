@@ -33,7 +33,7 @@ All the relationships were correctly created: a user may have multiple transacti
 
 **Scrum board link:**
 
-https://github.com/users/k-bridget/projects/3
+https://github.com/users/k-bridget/projects/3/views/1
 
 
 
