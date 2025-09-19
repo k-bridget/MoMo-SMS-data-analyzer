@@ -18,7 +18,7 @@ https://drive.google.com/file/d/1K0mqCrwEBYd1XCdkQUQJX3CplMUvC0OH/view?usp=shari
 
 **ERD documentation**
 
-The MoMo SMS Data Processing System Entity Relationshi Diagram (ERD) was created to fulfill business and technical requirements and be extendable, maintainable, and efficient in processing mobile money data. The four major entities and the general themes for designing are Users, Transactions, Transaction_Categories, and System_Logs. They are essential attributes of a mobile money scenario and are still receptive to further enhancements.
+The MoMo SMS Data Processing System Entity Relationship Diagram (ERD) was created to fulfill business and technical requirements and be extendable, maintainable, and efficient in processing mobile money data. The four major entities and the general themes for designing are Users, Transactions, Transaction_Categories, and System_Logs. They are essential attributes of a mobile money scenario and are still receptive to further enhancements.
 Both senders and recipients are also stored in the Users table along with the user type (customer, merchant, or agent), phone number, and name. It is stored separately from it to maintain it in a highly normalized form, prevent redundancy, and make customer segmentation for reporting purposes, as well as service customization, more straightforward.
 
 
