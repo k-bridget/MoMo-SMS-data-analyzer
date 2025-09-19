@@ -33,8 +33,7 @@ All the relationships were correctly created: a user may have multiple transacti
 
 **Scrum board link:**
 
-https://github.com/users/k-bridget/projects/3/views/1
-
+https://alustudent-team-dcq685fi.atlassian.net/jira/software/projects/T1/boards/34
 
 
 ## JSON Data Modeling
