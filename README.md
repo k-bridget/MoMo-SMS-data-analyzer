@@ -18,15 +18,25 @@ https://drive.google.com/file/d/1K0mqCrwEBYd1XCdkQUQJX3CplMUvC0OH/view?usp=shari
 
 **ERD documentation**
 
-The MoMo SMS Data Processing System Entity Relationship Diagram (ERD) was created to fulfill business and technical requirements and be extendable, maintainable, and efficient in processing mobile money data. The four major entities and the general themes for designing are Users, Transactions, Transaction_Categories, and System_Logs. They are essential attributes of a mobile money scenario and are still receptive to further enhancements.
-Both senders and recipients are also stored in the Users table along with the user type (customer, merchant, or agent), phone number, and name. It is stored separately from it in order to maintain it in a highly normalized form, prevent redundancy, and make customer segmentation for reporting purposes, as well as service customization, simpler.
+The MoMo SMS Data Processing System Entity Relationshi Diagram (ERD) was created to fulfill business and technical requirements and be extendable, maintainable, and efficient in processing mobile money data. The four major entities and the general themes for designing are Users, Transactions, Transaction_Categories, and System_Logs. They are essential attributes of a mobile money scenario and are still receptive to further enhancements.
+Both senders and recipients are also stored in the Users table along with the user type (customer, merchant, or agent), phone number, and name. It is stored separately from it to maintain it in a highly normalized form, prevent redundancy, and make customer segmentation for reporting purposes, as well as service customization, more straightforward.
 
-The Transactions table is the main table in the database that records the major attributes like amount, currency, date, and status of the transaction. Foreign key references of receiver, sender, and category are also stored in the table for money flow tracking, as well as transaction history.
+
+The Transactions table is the main table in the database that records the primary attributes like amount, currency, date, and transaction status. Foreign key references of receiver, sender, and category are also stored in the table for money flow tracking and transaction history.
 The additional Transaction_Categories table was used to type transactions such as payments, transfers, and airtime purchases. Abstraction here supports ad hoc querying through patterns and trends by transaction type.
+
 
 Transparency and accountability are achieved by the System_Logs table through the maintenance of system activity and errors encountered with respect to particular transactions. Troubleshooting and auditing are facilitated by the design with accountability for data processing.
 
-All the relationships were correctly created: a user may have multiple transactions, a category may be related to several transactions, and a transaction may have several logs. The design provides for a possible future many-to-many relationship resolution by means of a junction. The ERD is a generally normalized and stable database schema that can deal with quick processing as well as business intelligence needs, with secure storage and reasonable analysis of MoMo SMS data.
+
+All the relationships were correctly created: a user may have multiple transactions, a category may be related to several transactions, and a transaction may have several logs. The design provides for a possible future many-to-many relationship resolution through a junction. The ERD is a generally normalized and stable database schema that can deal with quick processing, business intelligence needs, secure storage, and reasonable analysis of MoMo SMS data.
+
+
+...
+
+
+
+
 
 
 
