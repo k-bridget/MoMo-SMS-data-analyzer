@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from etl.parse_xml import parse_sms
 
 # Load transactions from XML
-transactions = parse_sms("data/raw/momo.xml")
+transactions = parse_sms("data/raw/modified_sms_v2.xml")
 
 # Helper function to find a transaction by ID
 def get_transaction(txn_id):

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<transactions>
-    <sms id="1" type="deposit" amount="5000" sender="0788001111" receiver="MOMO_AGENT" timestamp="2025-09-01T08:30:00" />
-    <sms id="2" type="withdrawal" amount="2000" sender="MOMO_AGENT" receiver="0788002222" timestamp="2025-09-01T09:00:00" />
-    <sms id="3" type="transfer" amount="1500" sender="0788001111" receiver="0788003333" timestamp="2025-09-01T09:15:00" />
-    <sms id="4" type="payment" amount="3000" sender="0788004444" receiver="0788005555" timestamp="2025-09-01T10:00:00" />
-    <sms id="5" type="deposit" amount="10000" sender="0788006666" receiver="MOMO_AGENT" timestamp="2025-09-01T11:45:00" />
-</transactions>

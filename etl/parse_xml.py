@@ -25,7 +25,7 @@ def parse_sms(xml_file):
 
 
 if __name__ == "__main__":
-    file_path = "data/raw/momo.xml"
+    file_path = "data/raw/modified_sms_v2.xml"
     records = parse_sms(file_path)
 
     if not records:
