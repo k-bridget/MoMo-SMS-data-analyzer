@@ -8,10 +8,12 @@ transactions = parse_sms("data/raw/modified_sms_v2.xml")
 
 # Helper function to find a transaction by ID
 def get_transaction(txn_id):
+    txn_id = str(txn_id).strip()
     for txn in transactions:
-        if txn["id"] == txn_id:
+        if txn["id"] and txn["id"].strip() == txn_id:
             return txn
     return None
+
 
 class RequestHandler(BaseHTTPRequestHandler):
     def _set_headers(self, status=200):
