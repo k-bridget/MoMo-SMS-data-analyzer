@@ -1,61 +1,54 @@
+# dsa/parse_xml.py
+"""
+Parse modified_sms_v2.xml into JSON transactions list.
+Expected XML structure per record (example):
+<sms>
+  <id>123</id>
+  <type>credit</type>
+  <amount>5000</amount>
+  <sender>+2507...</sender>
+  <receiver>+25078...</receiver>
+  <timestamp>2025-09-20T12:34:56</timestamp>
+  <text>Payment received</text>
+</sms>
+"""
+
 import xml.etree.ElementTree as ET
-import re
+import json
+import os
+import sys
 
-def parse_sms_body(body):
-    # Initialize defaults
-    transaction_type = 'unknown'
-    amount = 0.0
-    sender = ''
-    receiver = ''
-    
-    # Patterns for different transaction types
-    received_pattern = r"You have received (\d+(?:,\d+)?(?:\.\d+)?) RWF from ([^()]+)"
-    payment_pattern = r"Your payment of (\d+(?:,\d+)?(?:\.\d+)?) RWF to ([^()]+)"
-    transfer_pattern = r"(\d+(?:,\d+)?(?:\.\d+)?) RWF transferred to ([^()]+).*from (\d+)"
-    deposit_pattern = r"A bank deposit of (\d+(?:,\d+)?(?:\.\d+)?) RWF has been added"
-    
-    if re.search(received_pattern, body):
-        match = re.search(received_pattern, body)
-        amount = float(match.group(1).replace(',', ''))
-        sender = match.group(2).strip()
-        transaction_type = 'received'
-    elif re.search(payment_pattern, body):
-        match = re.search(payment_pattern, body)
-        amount = float(match.group(1).replace(',', ''))
-        receiver = match.group(2).strip()
-        transaction_type = 'payment'
-    elif re.search(transfer_pattern, body):
-        match = re.search(transfer_pattern, body)
-        amount = float(match.group(1).replace(',', ''))
-        receiver = match.group(2).strip()
-        # sender could be extracted from 'from' but it's an ID, so leave as ''
-        transaction_type = 'transfer'
-    elif re.search(deposit_pattern, body):
-        match = re.search(deposit_pattern, body)
-        amount = float(match.group(1).replace(',', ''))
-        transaction_type = 'deposit'
-    
-    return {
-        'type': transaction_type,
-        'amount': amount,
-        'sender': sender,
-        'receiver': receiver
-    }
+ROOT = os.path.dirname(os.path.dirname(__file__))  # project root
+XML_FILE = os.path.join(ROOT, "modified_sms_v2.xml")
+OUT_FILE = os.path.join(ROOT, "api", "transactions.json")
 
-def parse_xml(file_path):
-    tree = ET.parse(file_path)
+def element_to_dict(elem):
+    d = {}
+    for child in elem:
+        d[child.tag] = child.text
+    # ensure id exists as string
+    if "id" in d:
+        d["id"] = str(d["id"])
+    return d
+
+def parse(xml_path=XML_FILE, out_path=OUT_FILE):
+    if not os.path.exists(xml_path):
+        print("XML file not found:", xml_path)
+        return []
+    tree = ET.parse(xml_path)
     root = tree.getroot()
     transactions = []
-    for i, sms in enumerate(root.findall('sms'), 1):
-        body = sms.get('body', '')
-        parsed = parse_sms_body(body)
-        transaction = {
-            'id': i,
-            'type': parsed['type'],
-            'amount': parsed['amount'],
-            'sender': parsed['sender'],
-            'receiver': parsed['receiver'],
-            'timestamp': sms.get('date', '')
-        }
-        transactions.append(transaction)
+    # if root contains many <sms> children
+    for sms in root.findall(".//sms"):
+        d = element_to_dict(sms)
+        if "id" in d:
+            transactions.append(d)
+    # save as JSON
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(transactions, f, indent=2, ensure_ascii=False)
+    print(f"Saved {len(transactions)} transactions to {out_path}")
     return transactions
+
+if __name__ == "__main__":
+    parse()

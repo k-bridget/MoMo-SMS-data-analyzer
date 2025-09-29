@@ -1,94 +1,61 @@
-import time
+import json
+import os
 import random
-import xml.etree.ElementTree as ET
+import time
+from statistics import mean
 
-# Parse XML and extract transactions
-def parse_xml(file_path):
-    tree = ET.parse(file_path)
-    root = tree.getroot()
-    transactions = []
-    for i, record in enumerate(root.findall('.//record'), 1):  # Assuming records are under some tag
-        transaction = {
-            'id': i,
-            'type': record.find('type').text if record.find('type') is not None else 'unknown',
-            'amount': float(record.find('amount').text) if record.find('amount') is not None else 0.0,
-            'sender': record.find('sender').text if record.find('sender') is not None else '',
-            'receiver': record.find('receiver').text if record.find('receiver') is not None else '',
-            'timestamp': record.find('timestamp').text if record.find('timestamp') is not None else ''
-        }
-        transactions.append(transaction)
-    return transactions
+DATA_FILE = os.path.join(os.path.dirname(__file__), "..", "api", "transactions.json")
 
-# Generate additional transactions if needed to reach at least 20
-def generate_additional(transactions, n=20):
-    while len(transactions) < n:
-        transactions.append({
-            'id': len(transactions) + 1,
-            'type': 'generated',
-            'amount': random.uniform(10, 1000),
-            'sender': f'sender{len(transactions)}',
-            'receiver': f'receiver{len(transactions)}',
-            'timestamp': '2023-01-01'
-        })
-    return transactions
+def load_transactions():
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data
 
-# Linear Search: O(n)
-def linear_search(transactions, target_id):
-    for transaction in transactions:
-        if transaction['id'] == target_id:
-            return transaction
+def linear_search(lst, target_id):
+    for item in lst:
+        if item.get("id") == target_id:
+            return item
     return None
 
-# Dictionary Lookup: O(1) average
-def dict_lookup(trans_dict, target_id):
-    return trans_dict.get(target_id, None)
+def dict_lookup(dct, target_id):
+    return dct.get(target_id)
 
-# Main function to compare
-def main():
-    # Parse XML
-    try:
-        transactions = parse_xml('modified_sms_v2.xml')
-    except FileNotFoundError:
-        print("XML file not found, using generated data.")
-        transactions = []
+def benchmark(trs, trials=20):
+    # preparing dict mapping
+    d = {t["id"]: t for t in trs}
+    ids = [t["id"] for t in trs]
+    if len(ids) < trials:
+        trials = len(ids)
 
-    # Ensure at least 20 transactions
-    transactions = generate_additional(transactions, 20)
-    print(f"Using {len(transactions)} transactions.")
+    sample_ids = random.sample(ids, trials)
 
-    # Choose a random target ID to search
-    target_id = random.choice([t['id'] for t in transactions])
-    print(f"Searching for transaction with ID: {target_id}")
+    linear_times = []
+    dict_times = []
 
-    # Linear Search
-    start_time = time.time()
-    result_linear = linear_search(transactions, target_id)
-    linear_time = time.time() - start_time
+    for sid in sample_ids:
+        start = time.perf_counter()
+        linear_search(trs, sid)
+        linear_times.append(time.perf_counter() - start)
 
-    # Dictionary Lookup
-    trans_dict = {t['id']: t for t in transactions}
-    start_time = time.time()
-    result_dict = dict_lookup(trans_dict, target_id)
-    dict_time = time.time() - start_time
+        start = time.perf_counter()
+        dict_lookup(d, sid)
+        dict_times.append(time.perf_counter() - start)
 
-    # Results
-    print(f"Linear Search Time: {linear_time:.6f} seconds")
-    print(f"Dictionary Lookup Time: {dict_time:.6f} seconds")
-    if dict_time > 0:
-        print(f"Dictionary is {linear_time / dict_time:.2f} times faster")
-    else:
-        print("Dictionary lookup instantaneous")
-
-    # Verify results are the same
-    assert result_linear == result_dict, "Results should match"
-    print("Results match:", result_linear)
-
-    # Reflection
-    print("\nReflection:")
-    print("Dictionary lookup is faster than linear search because it uses a hash table for average O(1) time complexity,")
-    print("while linear search has O(n) time complexity, scanning each element sequentially.")
-    print("For large datasets, this difference becomes significant.")
-    print("\nAnother data structure/algorithm: Binary search on a sorted list (O(log n)), or a balanced BST like AVL tree for O(log n) insertions and lookups.")
+    results = {
+        "trials": trials,
+        "linear_avg_sec": mean(linear_times),
+        "dict_avg_sec": mean(dict_times),
+        "linear_times": linear_times,
+        "dict_times": dict_times
+    }
+    return results
 
 if __name__ == "__main__":
-    main()
+    trs = load_transactions()
+    print(f"Loaded {len(trs)} transactions")
+    res = benchmark(trs, trials=min(20, len(trs)))
+    print("Benchmark results (averages in seconds):")
+    print(json.dumps(res, indent=2))
+    print("\nReflection:")
+    print("Dictionary lookup is O(1) average time; linear search is O(n). For larger datasets, dict lookup will be much faster.")
+    print("Alternative improvements: use an indexed database (SQLite, Postgres) with an index on id, or use B-tree or hash-based indexes. For range/time queries, use sorted structures or an in-memory search tree (e.g., bisect on sorted lists) or specialized search engines (Elasticsearch).")
