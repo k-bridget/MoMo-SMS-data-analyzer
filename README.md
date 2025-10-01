@@ -55,3 +55,30 @@ Our relational tables were serialized into JSON for API responses.
 - **Transactions** - JSON `Transactions` array (with sender_id, receiver_id, category_id)  
 - **System_Logs** - JSON `System_Logs` array  
 - **Complex_Transaction_Object** - Nested JSON object showing one transaction with related user info, category, and logs.   
+
+
+SETUP
+
+cd MoMo-SMS-data-analyzer-2
+python3 -m api.app    # to run the server
+
+**GET all transactions**
+curl -u admin:secretpass http://localhost:8000/transactions
+
+**GET a single transaction**
+curl -u admin:secretpass http://localhost:8000/transactions/<transaction_id>
+
+**POST a new transaction**
+curl -u admin:secretpass -X POST http://localhost:8000/transactions \
+-H "Content-Type: application/json" \
+-d '{"id":"9999999999999","type":"deposit","amount":5000,"sender":"0788001111","receiver":"MOMO_AGENT","timestamp":"2025-09-01T08:00:00"}'
+
+**PUT (update) a transaction**
+curl -u admin:secretpass -X PUT http://localhost:8000/transactions/<transaction_id> \
+-H "Content-Type: application/json" \
+-d '{"amount":10000}'
+
+**DELETE a transaction**
+curl -u admin:secretpass -X DELETE http://localhost:8000/transactions/<transaction_id>
+
+
